@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rosbag-dp3"
+version = "0.1.0"
+description = "Offline ROS2 bag conversion to DP3 Zarr"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy==2.2.6",
+  "rosbags==0.10.11",
+  "PyYAML==6.0.2",
+  "zarr==2.18.7",
+  "numcodecs==0.15.1",
+]
+
+[project.optional-dependencies]
+test = ["pytest==8.3.5"]
+
+[project.scripts]
+rosbag-dp3 = "convest.dp3_cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

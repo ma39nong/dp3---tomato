@@ -1,0 +1,43 @@
+contract_version: 1
+units: radian
+
+# Standard-message example. Change topic paths and joint names to match your bag.
+# JointState messages need positions and velocities. JointTrajectory commands use
+# their last point.
+topics:
+  left_arm_state: {topic: /left/joint_states, type: sensor_msgs/msg/JointState}
+  right_arm_state: {topic: /right/joint_states, type: sensor_msgs/msg/JointState}
+  left_hand_state: {topic: /left_hand/joint_states, type: sensor_msgs/msg/JointState}
+  right_hand_state: {topic: /right_hand/joint_states, type: sensor_msgs/msg/JointState}
+  left_arm_action: {topic: /left/joint_trajectory, type: trajectory_msgs/msg/JointTrajectory}
+  right_arm_action: {topic: /right/joint_trajectory, type: trajectory_msgs/msg/JointTrajectory}
+  left_hand_action: {topic: /left_hand/command, type: sensor_msgs/msg/JointState}
+  right_hand_action: {topic: /right_hand/command, type: sensor_msgs/msg/JointState}
+  cam0_depth: {topic: /camera/depth/image_raw, type: sensor_msgs/msg/Image}
+  cam0_depth_info: {topic: /camera/depth/camera_info, type: sensor_msgs/msg/CameraInfo}
+
+source_joint_names:
+  measured_left_arm: &left_arm
+    [left_arm_joint_1, left_arm_joint_2, left_arm_joint_3, left_arm_joint_4,
+     left_arm_joint_5, left_arm_joint_6, left_arm_joint_7]
+  measured_right_arm: &right_arm
+    [right_arm_joint_1, right_arm_joint_2, right_arm_joint_3, right_arm_joint_4,
+     right_arm_joint_5, right_arm_joint_6, right_arm_joint_7]
+  left_hand: &left_hand
+    [left_hand_joint_1, left_hand_joint_2, left_hand_joint_3, left_hand_joint_4,
+     left_hand_joint_5, left_hand_joint_6, left_hand_joint_7, left_hand_joint_8,
+     left_hand_joint_9, left_hand_joint_10, left_hand_joint_11, left_hand_joint_12,
+     left_hand_joint_13, left_hand_joint_14, left_hand_joint_15, left_hand_joint_16,
+     left_hand_joint_17, left_hand_joint_18, left_hand_joint_19, left_hand_joint_20]
+  right_hand: &right_hand
+    [right_hand_joint_1, right_hand_joint_2, right_hand_joint_3, right_hand_joint_4,
+     right_hand_joint_5, right_hand_joint_6, right_hand_joint_7, right_hand_joint_8,
+     right_hand_joint_9, right_hand_joint_10, right_hand_joint_11, right_hand_joint_12,
+     right_hand_joint_13, right_hand_joint_14, right_hand_joint_15, right_hand_joint_16,
+     right_hand_joint_17, right_hand_joint_18, right_hand_joint_19, right_hand_joint_20]
+
+contract_joint_names:
+  left_arm: *left_arm
+  right_arm: *right_arm
+  left_hand: *left_hand
+  right_hand: *right_hand

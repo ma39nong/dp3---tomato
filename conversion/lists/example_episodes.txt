@@ -1,0 +1,2 @@
+# Bag directory names may be written as 1, episode1, or ranges such as 1-20.
+episode1

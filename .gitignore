@@ -1,0 +1,40 @@
+# Environments and caches
+.venv/
+.runtime/
+.conda/
+.cache/
+.contextguard/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Data, models and run outputs
+data/
+outputs/
+wandb/
+logs/
+reports/
+*.zarr/
+*.partial/
+*.progress.json
+*.db3
+*.mcap
+*.bag
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+*.h5
+*.hdf5
+
+# Local/editor files
+.env
+.env.*
+.idea/
+.vscode/
+.DS_Store
+*~
+*.swp

@@ -1,0 +1,40 @@
+# Copy this file for each robot/task. Relative paths are resolved from conversion/.
+source_root: data/rosbags
+output_root: outputs/intermediate
+repo_id: example/robot_task
+source_format: bimanual_rosbag2
+target_format: dp3_uncropped_zarr
+contract: schemas/example_contract.yaml
+schema_dir: schemas
+task: Describe the demonstrated task here.
+quality_groups:
+  train: lists/example_episodes.txt
+
+fps: 10
+max_staleness_ms: 150
+window: available_intersection
+min_segment_frames: 2
+state_dim: 54
+max_joint_step_rad: 1.0
+max_hand_step: 1.0
+min_free_gb: 10
+action_policy: sample_hold
+
+# 16UC1 is commonly millimetres; 32FC1 is always interpreted as metres.
+depth_scale_m: 0.001
+min_depth_m: 0.05
+max_depth_m: 3.0
+pixel_stride: 2
+
+# This example keeps points in the fixed depth-camera frame. For a moving camera,
+# replace the matrix/frame/version with a calibrated camera-to-workcell transform
+# and set require_coordinate_transform: true.
+source_point_frame: depth_camera_optical_frame
+point_frame: depth_camera_optical_frame
+T_point_from_depth_camera:
+  - [1.0, 0.0, 0.0, 0.0]
+  - [0.0, 1.0, 0.0, 0.0]
+  - [0.0, 0.0, 1.0, 0.0]
+  - [0.0, 0.0, 0.0, 1.0]
+calibration_version: fixed-camera-example-v1
+require_coordinate_transform: false

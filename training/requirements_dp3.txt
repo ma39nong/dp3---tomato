@@ -1,0 +1,24 @@
+# Direct pip dependencies for offline DP3 training on this machine's stack.
+# Install AFTER torch/torchvision (see scripts/setup_dp3_env.sh).
+# Do NOT pip-install torch from this file — CUDA wheels must come from the
+# PyTorch index matching the target GPU driver.
+#
+# Snapshot source machine (2026-07):
+#   Python 3.10.20, torch 2.7.1+cu128, RTX 5090, driver ~580
+
+numpy==1.26.4
+zarr==2.18.3
+numcodecs==0.13.1
+hydra-core==1.3.2
+omegaconf==2.3.0
+dill==0.3.8
+einops==0.8.1
+diffusers==0.11.1
+wandb==0.17.9
+tqdm==4.68.4
+termcolor==3.3.0
+Pillow==12.2.0
+PyYAML==6.0.3
+huggingface-hub==0.25.2
+numba==0.60.0
+plotly==6.3.1

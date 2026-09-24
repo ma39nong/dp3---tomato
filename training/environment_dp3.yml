@@ -1,0 +1,15 @@
+# Minimal conda env for offline DP3 training (HINYEUN / real-robot zarr).
+# Torch and most Python packages are installed via pip — see requirements_dp3.txt
+# and scripts/setup_dp3_env.sh.
+#
+# Create:
+#   conda env create -f environment_dp3.yml
+#   conda activate dp3
+#   bash scripts/setup_dp3_env.sh
+#
+name: dp3
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
