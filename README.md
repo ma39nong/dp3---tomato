@@ -1,7 +1,9 @@
 # ROS2 Bag to DP3 Training Pipeline
 
-面向 franka-wuji 采摘番茄任务的一套可复用离线流水线：将双臂机器人 ROS2 sqlite3 rosbag 转为未裁剪中间
+一套可复用的离线流水线：将双臂机器人 ROS2 sqlite3 rosbag 转为未裁剪中间
 Zarr，交互式确定点云裁剪区域，生成固定点数的最终 Zarr，并训练 DP3。
+
+本仓库用于 franka-wuji 采摘番茄任务。
 
 ```text
 ROS2 bags
@@ -33,10 +35,20 @@ ROS2 bags
 
 
 （已经重新修改）
+原作者仓库：
+```bash
+git clone https://github.com/HMJ-max/DP3_ROSBAG_ZARR_TRAINING_BUNDLE.git
+cd DP3_ROSBAG_ZARR_TRAINING_BUNDLE
+```
+
+本仓库：
 ```bash
 git clone https://github.com/ma39nong/dp3---tomato.git
 cd dp3---tomato
+```
 
+进入克隆的仓库后安装环境：
+```bash
 # rosbag -> 中间 Zarr 环境
 ./dp3.sh setup-conversion
 
