@@ -31,6 +31,8 @@ ROS2 bags
 要求：Linux、Git、Python 3.11+、Conda/Miniforge、NVIDIA GPU/驱动。
 读取 bag 不需要安装 ROS 2。
 
+
+（已经重新修改）
 ```bash
 git clone https://github.com/ma39nong/dp3---tomato.git
 cd dp3---tomato
