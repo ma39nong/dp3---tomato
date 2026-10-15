@@ -3,7 +3,7 @@
 一套可复用的离线流水线：将双臂机器人 ROS2 sqlite3 rosbag 转为未裁剪中间
 Zarr，交互式确定点云裁剪区域，生成固定点数的最终 Zarr，并训练 DP3。
 
-本仓库用于 franka-wuji 采摘番茄任务。
+本仓库用于 `franka-sharpa` 双臂双手采摘番茄任务。Sharpa 每只手 22 DoF，DP3 状态/动作维度固定为 58D。
 
 ```text
 ROS2 bags
@@ -33,13 +33,6 @@ ROS2 bags
 要求：Linux、Git、Python 3.11+、Conda/Miniforge、NVIDIA GPU/驱动。
 读取 bag 不需要安装 ROS 2。
 
-
-（已经重新修改）
-原作者仓库：
-```bash
-git clone https://github.com/HMJ-max/DP3_ROSBAG_ZARR_TRAINING_BUNDLE.git
-cd DP3_ROSBAG_ZARR_TRAINING_BUNDLE
-```
 
 本仓库：
 ```bash
@@ -71,7 +64,18 @@ cp conversion/schemas/example_contract.yaml conversion/schemas/my_robot.yaml
 cp conversion/lists/example_episodes.txt conversion/lists/my_episodes.txt
 ```
 
-至少修改：
+Sharpa episode68 的已验证配置：
+
+```bash
+conversion/configs/harvest_tomato_sharpa_episode68.yaml
+conversion/schemas/harvest_tomato_sharpa_contract.yaml
+```
+
+其中 `state_dim: 58`，布局为 `left_arm[7], left_hand[22], right_arm[7], right_hand[22]`。
+左右手状态话题分别为 `/sharpa/left/joint_states`、`/sharpa/right/joint_states`，命令话题分别为
+`/sharpa/left/command`、`/sharpa/right/command`。
+
+自定义数据时至少修改：
 
 1. `source_root`：包含各 episode 目录的路径，每个目录内有 `metadata.yaml` 和 `.db3`。
 2. `contract`：指向自己的 contract；修改所有话题和关节名。
@@ -151,12 +155,12 @@ xdg-open outputs/crop_selector.html
   --crop-config configs/my_crop.json \
   --allow-camera-frame \
   --num-points 4096 \
-  --expected-dim 54 \
+  --expected-dim 58 \
   --voxel-size 0.005 \
   --workers 8
 
 ./dp3.sh verify-final outputs/my_task_4096.zarr \
-  --num-points 4096 --expected-dim 54
+  --num-points 4096 --expected-dim 58
 ```
 
 每帧先裁剪，再体素降采样，最后使用确定性的 farthest-point sampling 固定为 N 点。
@@ -165,17 +169,28 @@ xdg-open outputs/crop_selector.html
 
 ## 6. 训练 DP3
 
+Sharpa 专用快捷命令：
+
+```bash
+./training/scripts/validate_sharpa_contract.py
+./conversion/scripts/convert_sharpa_episode68.sh --limit 3
+./training/scripts/train_sharpa.sh \
+  conversion/outputs/harvest_tomato_sharpa_episode68/train/dataset_uncropped.zarr smoke
+```
+
+正式训练前必须先完成裁剪和 `verify-final`；不要把未裁剪 Zarr 直接作为正式部署模型数据。
+
 先做短流程检查：
 
 ```bash
 ./dp3.sh self-check
-./dp3.sh train outputs/my_task_4096.zarr smoke my-task-smoke
+./dp3.sh train outputs/sharpa_4096.zarr smoke sharpa-58d-smoke
 ```
 
 正式训练默认 50 epoch，并按验证损失保存 checkpoint：
 
 ```bash
-./dp3.sh train outputs/my_task_4096.zarr full my-task \
+./dp3.sh train outputs/sharpa_4096.zarr full sharpa-58d \
   training.num_epochs=300 \
   training.checkpoint_every=30 \
   dataloader.batch_size=32
