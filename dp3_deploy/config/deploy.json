@@ -1,0 +1,267 @@
+{
+  "schema": "harvest_dp3_prediction_bundle/v1",
+  "checkpoint_source": "/home/user/dp3/DP3_ROSBAG_ZARR_TRAINING_BUNDLE/training/data/outputs/harvest-tomato-ab-pre722-40-40-300-from-scratch-4096/checkpoints/epoch=0020.ckpt",
+  "checkpoint_epoch": 20,
+  "weights": "ema_model",
+  "prediction_semantics": "absolute_joint_target_rad",
+  "observation_steps": 2,
+  "action_steps": 4,
+  "state_dim": 54,
+  "num_points": 4096,
+  "target_hz": 10,
+  "point_frame": "cam0_depth_optical_frame",
+  "pixel_stride": 2,
+  "depth_scale_m": 0.001,
+  "min_depth_m": 0.05,
+  "max_depth_m": 3.0,
+  "T_point_from_depth_camera": [
+    [
+      1.0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      1.0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1.0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1.0
+    ]
+  ],
+  "crop_min": [
+    -1.2000000476837158,
+    -0.6000000238418579,
+    0.30000001192092896
+  ],
+  "crop_max": [
+    1.2000000476837158,
+    0.30000001192092896,
+    1.4500000476837158
+  ],
+  "clip_planes": [
+    {
+      "anchor": [
+        -0.0,
+        -0.0,
+        -0.0
+      ],
+      "margin": 0.0,
+      "name": "keep_right_of_image_column_40",
+      "normal": [
+        0.7482601000053603,
+        0.0,
+        0.6634054738543904
+      ],
+      "offset": 0.0
+    },
+    {
+      "anchor": [
+        -0.0,
+        -0.0,
+        -0.0
+      ],
+      "margin": 0.0,
+      "name": "keep_below_image_row_40",
+      "normal": [
+        0.0,
+        0.8869718011127106,
+        0.46182358539909424
+      ],
+      "offset": 0.0
+    }
+  ],
+  "voxel_size_m": 0.005,
+  "state_names": [
+    "left_fr3_joint1",
+    "left_fr3_joint2",
+    "left_fr3_joint3",
+    "left_fr3_joint4",
+    "left_fr3_joint5",
+    "left_fr3_joint6",
+    "left_fr3_joint7",
+    "l_thumb_cmc_flex",
+    "l_thumb_cmc_abd",
+    "l_thumb_mcp",
+    "l_thumb_ip",
+    "l_index_finger_mcp_flex",
+    "l_index_finger_mcp_abd",
+    "l_index_finger_pip",
+    "l_index_finger_dip",
+    "l_middle_finger_mcp_flex",
+    "l_middle_finger_mcp_abd",
+    "l_middle_finger_pip",
+    "l_middle_finger_dip",
+    "l_ring_finger_mcp_flex",
+    "l_ring_finger_mcp_abd",
+    "l_ring_finger_pip",
+    "l_ring_finger_dip",
+    "l_pinky_mcp_flex",
+    "l_pinky_mcp_abd",
+    "l_pinky_pip",
+    "l_pinky_dip",
+    "right_fr3_joint1",
+    "right_fr3_joint2",
+    "right_fr3_joint3",
+    "right_fr3_joint4",
+    "right_fr3_joint5",
+    "right_fr3_joint6",
+    "right_fr3_joint7",
+    "r_thumb_cmc_flex",
+    "r_thumb_cmc_abd",
+    "r_thumb_mcp",
+    "r_thumb_ip",
+    "r_index_finger_mcp_flex",
+    "r_index_finger_mcp_abd",
+    "r_index_finger_pip",
+    "r_index_finger_dip",
+    "r_middle_finger_mcp_flex",
+    "r_middle_finger_mcp_abd",
+    "r_middle_finger_pip",
+    "r_middle_finger_dip",
+    "r_ring_finger_mcp_flex",
+    "r_ring_finger_mcp_abd",
+    "r_ring_finger_pip",
+    "r_ring_finger_dip",
+    "r_pinky_mcp_flex",
+    "r_pinky_mcp_abd",
+    "r_pinky_pip",
+    "r_pinky_dip"
+  ],
+  "action_names": [
+    "left_fr3_joint1",
+    "left_fr3_joint2",
+    "left_fr3_joint3",
+    "left_fr3_joint4",
+    "left_fr3_joint5",
+    "left_fr3_joint6",
+    "left_fr3_joint7",
+    "l_thumb_cmc_flex",
+    "l_thumb_cmc_abd",
+    "l_thumb_mcp",
+    "l_thumb_ip",
+    "l_index_finger_mcp_flex",
+    "l_index_finger_mcp_abd",
+    "l_index_finger_pip",
+    "l_index_finger_dip",
+    "l_middle_finger_mcp_flex",
+    "l_middle_finger_mcp_abd",
+    "l_middle_finger_pip",
+    "l_middle_finger_dip",
+    "l_ring_finger_mcp_flex",
+    "l_ring_finger_mcp_abd",
+    "l_ring_finger_pip",
+    "l_ring_finger_dip",
+    "l_pinky_mcp_flex",
+    "l_pinky_mcp_abd",
+    "l_pinky_pip",
+    "l_pinky_dip",
+    "right_fr3_joint1",
+    "right_fr3_joint2",
+    "right_fr3_joint3",
+    "right_fr3_joint4",
+    "right_fr3_joint5",
+    "right_fr3_joint6",
+    "right_fr3_joint7",
+    "r_thumb_cmc_flex",
+    "r_thumb_cmc_abd",
+    "r_thumb_mcp",
+    "r_thumb_ip",
+    "r_index_finger_mcp_flex",
+    "r_index_finger_mcp_abd",
+    "r_index_finger_pip",
+    "r_index_finger_dip",
+    "r_middle_finger_mcp_flex",
+    "r_middle_finger_mcp_abd",
+    "r_middle_finger_pip",
+    "r_middle_finger_dip",
+    "r_ring_finger_mcp_flex",
+    "r_ring_finger_mcp_abd",
+    "r_ring_finger_pip",
+    "r_ring_finger_dip",
+    "r_pinky_mcp_flex",
+    "r_pinky_mcp_abd",
+    "r_pinky_pip",
+    "r_pinky_dip"
+  ],
+  "policy": {
+    "_target_": "diffusion_policy_3d.policy.dp3.DP3",
+    "use_point_crop": true,
+    "condition_type": "film",
+    "use_down_condition": true,
+    "use_mid_condition": true,
+    "use_up_condition": true,
+    "diffusion_step_embed_dim": 128,
+    "down_dims": [
+      512,
+      1024,
+      2048
+    ],
+    "crop_shape": [
+      80,
+      80
+    ],
+    "encoder_output_dim": 64,
+    "horizon": 16,
+    "kernel_size": 5,
+    "n_action_steps": 4,
+    "n_groups": 8,
+    "n_obs_steps": 2,
+    "noise_scheduler": {
+      "_target_": "diffusers.schedulers.scheduling_ddim.DDIMScheduler",
+      "num_train_timesteps": 100,
+      "beta_start": 0.0001,
+      "beta_end": 0.02,
+      "beta_schedule": "squaredcos_cap_v2",
+      "clip_sample": true,
+      "set_alpha_to_one": true,
+      "steps_offset": 0,
+      "prediction_type": "sample"
+    },
+    "num_inference_steps": 10,
+    "obs_as_global_cond": true,
+    "shape_meta": {
+      "obs": {
+        "point_cloud": {
+          "shape": [
+            4096,
+            3
+          ],
+          "type": "point_cloud"
+        },
+        "agent_pos": {
+          "shape": [
+            54
+          ],
+          "type": "low_dim"
+        }
+      },
+      "action": {
+        "shape": [
+          54
+        ]
+      }
+    },
+    "use_pc_color": false,
+    "pointnet_type": "pointnet",
+    "pointcloud_encoder_cfg": {
+      "in_channels": 3,
+      "out_channels": 64,
+      "use_layernorm": true,
+      "final_norm": "layernorm",
+      "normal_channel": false
+    }
+  },
+  "ema_weights_sha256": "aca9d024db626fe3be60d235451f06d3b13915d3deca827f8116a435e10db949"
+}

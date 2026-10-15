@@ -1,0 +1,47 @@
+# New experiment only. The 50-epoch run and its checkpoints remain untouched.
+defaults:
+  - dp3
+  - override task: generic_robot
+  - _self_
+
+exp_name: harvest-tomato-ab-pre722-40-40-300-from-scratch-4096
+task:
+  dataset:
+    grouped_validation: true
+    seed: 42
+    val_ratio: 0.1
+    point_cloud_noise_std: 0.002
+optimizer:
+  weight_decay: 0.0001
+training:
+  seed: 42
+  num_epochs: 300
+  stop_after_epoch: null
+  run_validation: true
+  deterministic_validation: true
+  resume: false
+  use_ema: true
+  lr_scheduler: harvest_two_stage_cosine
+  lr_warmup_steps: 500
+  gradient_accumulate_every: 1
+dataloader:
+  batch_size: 32
+  num_workers: 4
+val_dataloader:
+  batch_size: 32
+  num_workers: 4
+checkpoint:
+  topk:
+    k: 5
+experiment:
+  smoke_mode: false
+  lr_first_stage_end_epoch: 50
+  lr_middle: 0.00001
+  lr_final: 0.000001
+  milestones: [10, 20, 30, 50, 75, 100, 150, 200, 250, 300]
+  action_eval_every: 5
+  fixed_train_bags_per_source: 2
+  grad_norm_every_steps: 25
+  # Warning only: training and checkpoint saves continue unchanged.
+  warning_patience: 20
+  warning_min_delta: 0.00001

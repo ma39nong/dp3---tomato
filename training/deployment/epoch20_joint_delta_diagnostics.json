@@ -1,0 +1,198 @@
+{
+  "validation_sequences": 7470,
+  "all_frame_alignment_exact": true,
+  "threshold_rad": 0.05,
+  "arm": {
+    "both_arms": {
+      "q_to_gt": {
+        "mean_abs_all_joints": 0.004762362808810103,
+        "median_abs_all_joints": 0.0014056414365768433,
+        "sequence_any_joint_gt_0p05_fraction": 0.15461847389558234,
+        "sequence_max_joint_delta_median": 0.01614171266555786,
+        "sequence_max_joint_delta_p95": 0.11164382286369796
+      },
+      "q_to_pred": {
+        "mean_abs_all_joints": 0.07629824654437364,
+        "median_abs_all_joints": 0.047575443983078,
+        "sequence_any_joint_gt_0p05_fraction": 0.9987951807228915,
+        "sequence_max_joint_delta_median": 0.2223091721534729,
+        "sequence_max_joint_delta_p95": 0.5453482389450072
+      },
+      "gt_to_pred": {
+        "mean_abs_all_joints": 0.07679371790192012,
+        "median_abs_all_joints": 0.04773080348968506,
+        "sequence_any_joint_gt_0p05_fraction": 0.9995983935742971,
+        "sequence_max_joint_delta_median": 0.22360354661941528,
+        "sequence_max_joint_delta_p95": 0.5605554103851313
+      }
+    },
+    "left_arm": {
+      "q_to_gt": {
+        "mean_abs_all_joints": 0.006485062327106358,
+        "median_abs_all_joints": 0.0015491843223571777,
+        "sequence_any_joint_gt_0p05_fraction": 0.13761713520749666,
+        "sequence_max_joint_delta_median": 0.010850969702005386,
+        "sequence_max_joint_delta_p95": 0.10720878541469561
+      },
+      "q_to_pred": {
+        "mean_abs_all_joints": 0.08375912414450903,
+        "median_abs_all_joints": 0.05289795994758606,
+        "sequence_any_joint_gt_0p05_fraction": 0.9884872824631861,
+        "sequence_max_joint_delta_median": 0.19770711660385132,
+        "sequence_max_joint_delta_p95": 0.46885821521282184
+      },
+      "gt_to_pred": {
+        "mean_abs_all_joints": 0.08460158632132649,
+        "median_abs_all_joints": 0.05333622172474861,
+        "sequence_any_joint_gt_0p05_fraction": 0.9939759036144579,
+        "sequence_max_joint_delta_median": 0.20037195086479187,
+        "sequence_max_joint_delta_p95": 0.46965730302035796
+      }
+    },
+    "right_arm": {
+      "q_to_gt": {
+        "mean_abs_all_joints": 0.003039663290513847,
+        "median_abs_all_joints": 0.0013244152069091797,
+        "sequence_any_joint_gt_0p05_fraction": 0.017001338688085676,
+        "sequence_max_joint_delta_median": 0.0037311315536499023,
+        "sequence_max_joint_delta_p95": 0.030736473202705283
+      },
+      "q_to_pred": {
+        "mean_abs_all_joints": 0.06883736894423824,
+        "median_abs_all_joints": 0.04275524616241455,
+        "sequence_any_joint_gt_0p05_fraction": 0.9323962516733602,
+        "sequence_max_joint_delta_median": 0.1319049596786499,
+        "sequence_max_joint_delta_p95": 0.4886459827423094
+      },
+      "gt_to_pred": {
+        "mean_abs_all_joints": 0.06898584948251377,
+        "median_abs_all_joints": 0.04294252395629883,
+        "sequence_any_joint_gt_0p05_fraction": 0.9326639892904953,
+        "sequence_max_joint_delta_median": 0.1313229203224182,
+        "sequence_max_joint_delta_p95": 0.4899162292480468
+      }
+    }
+  },
+  "hand": {
+    "both_hands": {
+      "q_to_gt": {
+        "mean_abs_all_joints": 0.02440660322270465,
+        "median_abs_all_joints": 0.009071901440620422,
+        "sequence_any_joint_gt_0p05_fraction": 0.9218206157965194,
+        "sequence_max_joint_delta_median": 0.12736967206001282,
+        "sequence_max_joint_delta_p95": 0.46410086154937735
+      },
+      "q_to_pred": {
+        "mean_abs_all_joints": 0.05076727705685462,
+        "median_abs_all_joints": 0.03333182819187641,
+        "sequence_any_joint_gt_0p05_fraction": 0.9987951807228915,
+        "sequence_max_joint_delta_median": 0.18896349519491196,
+        "sequence_max_joint_delta_p95": 0.44023382961750007
+      },
+      "gt_to_pred": {
+        "mean_abs_all_joints": 0.04297543676864735,
+        "median_abs_all_joints": 0.02709902822971344,
+        "sequence_any_joint_gt_0p05_fraction": 0.9987951807228915,
+        "sequence_max_joint_delta_median": 0.14451488852500916,
+        "sequence_max_joint_delta_p95": 0.3395895790308714
+      }
+    },
+    "left_hand": {
+      "q_to_gt": {
+        "mean_abs_all_joints": 0.014089581126079932,
+        "median_abs_all_joints": 0.0050835758447647095,
+        "sequence_any_joint_gt_0p05_fraction": 0.30736278447121823,
+        "sequence_max_joint_delta_median": 0.01973477005958557,
+        "sequence_max_joint_delta_p95": 0.28639930486679077
+      },
+      "q_to_pred": {
+        "mean_abs_all_joints": 0.04303083074522089,
+        "median_abs_all_joints": 0.02608480304479599,
+        "sequence_any_joint_gt_0p05_fraction": 0.9273092369477912,
+        "sequence_max_joint_delta_median": 0.1218733936548233,
+        "sequence_max_joint_delta_p95": 0.3855497105047106
+      },
+      "gt_to_pred": {
+        "mean_abs_all_joints": 0.041216161094533084,
+        "median_abs_all_joints": 0.026196733117103577,
+        "sequence_any_joint_gt_0p05_fraction": 0.9350736278447122,
+        "sequence_max_joint_delta_median": 0.11692065000534058,
+        "sequence_max_joint_delta_p95": 0.3120366420596838
+      }
+    },
+    "right_hand": {
+      "q_to_gt": {
+        "mean_abs_all_joints": 0.03472362531932936,
+        "median_abs_all_joints": 0.01820799894630909,
+        "sequence_any_joint_gt_0p05_fraction": 0.9196787148594378,
+        "sequence_max_joint_delta_median": 0.08936866093426943,
+        "sequence_max_joint_delta_p95": 0.46164383590221403
+      },
+      "q_to_pred": {
+        "mean_abs_all_joints": 0.05850372336848835,
+        "median_abs_all_joints": 0.04120609164237976,
+        "sequence_any_joint_gt_0p05_fraction": 0.9938420348058902,
+        "sequence_max_joint_delta_median": 0.16775500774383545,
+        "sequence_max_joint_delta_p95": 0.37335687279701213
+      },
+      "gt_to_pred": {
+        "mean_abs_all_joints": 0.04473471244276162,
+        "median_abs_all_joints": 0.02807549759745598,
+        "sequence_any_joint_gt_0p05_fraction": 0.9870147255689424,
+        "sequence_max_joint_delta_median": 0.11629436910152435,
+        "sequence_max_joint_delta_p95": 0.30108054280281066
+      }
+    }
+  },
+  "top_predicted_arm_joints": [
+    {
+      "joint_name": "right_fr3_joint5",
+      "index": 31,
+      "q_to_pred_mean": 0.14891304341924078,
+      "q_to_gt_mean": 0.004164806832191615,
+      "q_to_pred_above_0p05_fraction": 0.6759036144578313
+    },
+    {
+      "joint_name": "left_fr3_joint7",
+      "index": 6,
+      "q_to_pred_mean": 0.13713726328627127,
+      "q_to_gt_mean": 0.019581443243042892,
+      "q_to_pred_above_0p05_fraction": 0.7423025435073628
+    },
+    {
+      "joint_name": "left_fr3_joint5",
+      "index": 4,
+      "q_to_pred_mean": 0.12646379237651695,
+      "q_to_gt_mean": 0.008192365038204145,
+      "q_to_pred_above_0p05_fraction": 0.6892904953145917
+    },
+    {
+      "joint_name": "left_fr3_joint3",
+      "index": 2,
+      "q_to_pred_mean": 0.08373445550930084,
+      "q_to_gt_mean": 0.0030498444297333955,
+      "q_to_pred_above_0p05_fraction": 0.5429718875502008
+    },
+    {
+      "joint_name": "right_fr3_joint7",
+      "index": 33,
+      "q_to_pred_mean": 0.08233659585795729,
+      "q_to_gt_mean": 0.003865984704599802,
+      "q_to_pred_above_0p05_fraction": 0.6168674698795181
+    },
+    {
+      "joint_name": "left_fr3_joint6",
+      "index": 5,
+      "q_to_pred_mean": 0.07876882246699199,
+      "q_to_gt_mean": 0.007478361579787779,
+      "q_to_pred_above_0p05_fraction": 0.5564926372155288
+    },
+    {
+      "joint_name": "left_fr3_joint1",
+      "index": 0,
+      "q_to_pred_mean": 0.06331225993979721,
+      "q_to_gt_mean": 0.0025643183781930675,
+      "q_to_pred_above_0p05_fraction": 0.48058902275769744
+    }
+  ]
+}

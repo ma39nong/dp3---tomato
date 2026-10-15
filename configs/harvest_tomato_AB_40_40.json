@@ -1,0 +1,23 @@
+{
+  "schema": "point_cloud_crop/v1",
+  "purpose": "harvest_tomato_A_B_pre722_full_training",
+  "coordinate_frame": "cam0_depth_optical_frame",
+  "keep_rule": "normal_dot_xyz_plus_offset_gte_margin",
+  "crop_min": [-1.2, -0.6, 0.3],
+  "crop_max": [1.2, 0.3, 1.45],
+  "planes": [
+    {
+      "name": "keep_right_of_image_column_40",
+      "normal": [1.0, 0.0, 0.8865974196],
+      "offset": 0.0,
+      "margin": 0.0
+    },
+    {
+      "name": "keep_below_image_row_40",
+      "normal": [0.0, 1.0, 0.5206744846],
+      "offset": 0.0,
+      "margin": 0.0
+    }
+  ],
+  "note": "Current 40/40 crop in cam0 optical coordinates. Recorded camera pitch varies between batches; no camera-to-workcell alignment is applied."
+}

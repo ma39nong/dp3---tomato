@@ -3,6 +3,7 @@ from pathlib import Path
 import fcntl
 import hashlib
 import json
+import re
 import shutil
 import subprocess
 import time
@@ -100,6 +101,13 @@ def convert_quality(config, quality, *, resume=False, skip_ineligible=False, lim
         for candidate in candidates:
             candidate.update(eligible=True, reason=None)
     selected, selection = select_episodes(candidates, list_path, skip_ineligible)
+    cutoff = config.get("max_episode_exclusive")
+    if cutoff is not None:
+        out_of_range = [Path(item["path"]).name for item in selected
+                        if (match := re.fullmatch(r"episode([0-9]+)", Path(item["path"]).name))
+                        and int(match.group(1)) >= cutoff]
+        if out_of_range:
+            raise ValueError(f"Episodes must be before {cutoff}: {out_of_range}")
     if limit is not None:
         selected = selected[:limit]
         selection["selected_episodes"] = [Path(item["path"]).name for item in selected]

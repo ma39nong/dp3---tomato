@@ -251,8 +251,10 @@ def _create_output(path: Path, source, frames: int, episodes: int, dim: int, num
 
 def convert(args):
     source, offsets, ends = validate_intermediate(
-        args.source, args.expected_dim, args.allow_camera_frame
+        args.source, args.expected_dim, args.allow_camera_frame,
+        getattr(args, "allow_incomplete", False),
     )
+    source_conversion_complete = source.attrs.get("conversion_complete") is True
     crop_config = getattr(args, "crop_config", None)
     if crop_config:
         if args.crop_min is not None or args.crop_max is not None:
@@ -282,7 +284,9 @@ def convert(args):
         shutil.rmtree(temporary)
     output.parent.mkdir(parents=True, exist_ok=True)
 
-    frames = source["data/state"].shape[0]
+    # In an incomplete source only episode_ends marks committed frames. Arrays
+    # may already contain a partially written next bag, so never include it.
+    frames = int(ends[-1])
     if args.expected_episodes is not None and len(ends) != args.expected_episodes:
         raise ValueError(f"Expected {args.expected_episodes} episodes, found {len(ends)}")
     if args.expected_frames is not None and frames != args.expected_frames:
@@ -353,8 +357,8 @@ def convert(args):
                         record_progress("processing", progress.n)
                         last_progress = time.monotonic()
         progress.close()
-        root["data/state"][:] = source["data/state"][:]
-        root["data/action"][:] = source["data/action"][:]
+        root["data/state"][:] = source["data/state"][:frames]
+        root["data/action"][:] = source["data/action"][:frames]
         root["meta/episode_ends"][:] = ends
         root.attrs.update(
             schema="bimanual_dp3_training_xyz/v1", source_dataset=str(zarr_path(args.source, True)),
@@ -366,6 +370,8 @@ def convert(args):
             training_ready=True, conversion_workers=workers,
             source_episode_names=source_names,
             excluded_episode_names=sorted((exclusion or {}).get("episodes", {})),
+            source_conversion_complete=source_conversion_complete,
+            committed_episodes_only=not source_conversion_complete,
         )
         record_progress("verifying", frames)
         verify_final(temporary, args.expected_dim, args.num_points)
@@ -387,6 +393,8 @@ def convert(args):
 
     report = {
         "output": str(output), "frames": frames, "episodes": len(ends),
+        "source_conversion_complete": source_conversion_complete,
+        "committed_episodes_only": not source_conversion_complete,
         "crop_min": crop_min.tolist(), "crop_max": crop_max.tolist(),
         "clip_planes": planes,
         "cropped_points": {
@@ -415,6 +423,8 @@ def convert(args):
     final_manifest = {
         "status": "verified", "schema": "bimanual_dp3_training_xyz/v1",
         "output": str(output), "source_dataset": str(source_path),
+        "source_conversion_complete": source_conversion_complete,
+        "committed_episodes_only": not source_conversion_complete,
         "source_manifest_sha256": hashlib.sha256(source_manifest.read_bytes()).hexdigest()
         if source_manifest.exists() else None,
         "crop_config": str(args.crop_config.resolve()) if args.crop_config else None,
@@ -492,7 +502,7 @@ def self_check():
             source=base / "delivery", output=output,
             crop_min=None, crop_max=None, voxel_size=0.01,
             crop_config=crop_config, num_points=64, expected_dim=54, overwrite=False,
-            allow_camera_frame=False, workers=1, chunk_frames=2,
+            allow_camera_frame=False, allow_incomplete=False, workers=1, chunk_frames=2,
             expected_episodes=1, expected_frames=2, exclusion_record=None,
         )
         convert(argparse.Namespace(**arguments))
@@ -506,6 +516,19 @@ def self_check():
         parallel = zarr.open_group(str(parallel_output), mode="r")
         for key in ("data/point_cloud", "data/state", "data/action", "meta/episode_ends"):
             assert np.array_equal(single[key][:], parallel[key][:]), key
+        source.attrs["conversion_complete"] = False
+        data["state"].resize((3, 54))
+        data["action"].resize((3, 54))
+        data["state"][2] = 9
+        data["action"][2] = 9
+        incomplete_output = base / "training_committed_only.zarr"
+        arguments.update(output=incomplete_output, workers=1, allow_incomplete=True)
+        convert(argparse.Namespace(**arguments))
+        incomplete = zarr.open_group(str(incomplete_output), mode="r")
+        assert incomplete.attrs["source_conversion_complete"] is False
+        assert incomplete.attrs["committed_episodes_only"] is True
+        assert incomplete["data/state"].shape == (2, 54)
+        assert np.array_equal(incomplete["data/point_cloud"][:], single["data/point_cloud"][:])
         selector = base / "selector.html"
         save_crop_selector_html(
             clouds[:4], selector, frame_ids=np.array([0, 0, 1, 1]),
@@ -548,6 +571,10 @@ def main():
     build.add_argument("--num-points", type=int, default=1024)
     build.add_argument("--expected-dim", type=int, default=54)
     build.add_argument("--allow-camera-frame", action="store_true")
+    build.add_argument(
+        "--allow-incomplete", action="store_true",
+        help="Crop only episodes already committed in a partially converted source; record this provenance",
+    )
     build.add_argument("--overwrite", action="store_true")
     build.add_argument("--workers", type=int, default=1)
     build.add_argument("--chunk-frames", type=int, default=64)

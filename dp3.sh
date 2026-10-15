@@ -14,6 +14,7 @@ case "$command" in
   preview) exec "$python_bin" "$root/training/scripts/bimanual_zarr.py" preview "$@" ;;
   crop) exec "$python_bin" "$root/training/scripts/bimanual_zarr.py" convert "$@" ;;
   verify-final) exec "$python_bin" "$root/training/scripts/bimanual_zarr.py" verify "$@" ;;
+  merge) exec "$python_bin" "$root/training/scripts/merge_bimanual_zarr.py" "$@" ;;
   self-check) exec "$python_bin" "$root/training/scripts/bimanual_zarr.py" self-check "$@" ;;
   train) exec bash "$root/training/scripts/train_bimanual.sh" "$@" ;;
   *)
@@ -27,6 +28,7 @@ Usage: ./dp3.sh COMMAND [arguments]
   preview              generate interactive point-cloud crop HTML
   crop                 crop/sample -> final fixed-size Zarr
   verify-final         validate final training Zarr
+  merge                combine cropped A/B Zarr datasets with exclusions
   self-check           synthetic crop/final-Zarr self-check
   train                train DP3 from final Zarr
 EOF

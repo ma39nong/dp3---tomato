@@ -7,6 +7,9 @@ from convest.align import align
 
 
 def validate_config(config):
+    cutoff = config.get("max_episode_exclusive")
+    if cutoff is not None and (not isinstance(cutoff, int) or isinstance(cutoff, bool) or cutoff < 1):
+        raise ValueError("max_episode_exclusive must be a positive integer")
     if config.get("window") not in ("validated", "available_intersection"):
         raise ValueError("DP3 window must be validated or available_intersection")
     if not isinstance(config.get("state_dim"), int) or config["state_dim"] < 1:

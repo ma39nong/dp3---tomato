@@ -71,6 +71,15 @@ elif [[ "$mode" == full ]]; then
     checkpoint.topk.monitor_key=val_loss checkpoint.topk.mode=min checkpoint.topk.k=3 \
     "checkpoint.topk.format_str='epoch={epoch:04d}-val_loss={val_loss:.6f}.ckpt'" \
     "${@:4}"
+elif [[ "$mode" == experiment300 || "$mode" == experiment300-resume ]]; then
+  common[0]=harvest_300.py
+  common[1]=--config-name=harvest_tomato_300
+  resume=false
+  [[ "$mode" == experiment300-resume ]] && resume=true
+  exec "$python_bin" "${common[@]}" "training.resume=$resume" \
+    "experiment.warning_patience=${DP3_WARNING_PATIENCE:-20}" \
+    "experiment.warning_min_delta=${DP3_WARNING_MIN_DELTA:-0.00001}" \
+    "${@:4}"
 elif [[ "$mode" =~ ^[0-9]+$ ]]; then
   plan_epochs="${DP3_PLAN_EPOCHS:-100}"
   if (( mode < 1 || mode > plan_epochs )); then

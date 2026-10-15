@@ -96,6 +96,9 @@ class GenericZarrDataset(BaseDataset):
             episode_mask=train_mask,
         )
         self.train_mask = train_mask
+        self.source_episode_names = (
+            list(map(str, zarr.open_group(zarr_path, mode="r").attrs.get("source_episode_names", [])))
+        )
         self.horizon = horizon
         self.pad_before = pad_before
         self.pad_after = pad_after
@@ -151,12 +154,47 @@ class GenericZarrDataset(BaseDataset):
         val_dataset.point_cloud_noise_std = 0.0
         return val_dataset
 
+    def get_fixed_train_eval_dataset(self, bags_per_source: int = 2, seed: int = 42):
+        """Choose whole training bags once, with evaluation preprocessing."""
+        if len(self.source_episode_names) != len(self.train_mask):
+            raise ValueError("Fixed train evaluation requires source bag names")
+        selected = []
+        rng = np.random.default_rng(seed)
+        for source in ("A", "B"):
+            candidates = sorted({name for name, keep in zip(
+                self.source_episode_names, self.train_mask)
+                if keep and name.startswith(source + "/")})
+            if candidates:
+                chosen = rng.choice(candidates, size=min(bags_per_source, len(candidates)),
+                                    replace=False)
+                selected.extend(map(str, chosen))
+        if not selected:
+            raise ValueError("No training bags available for fixed evaluation")
+        subset = copy.copy(self)
+        mask = np.asarray([keep and name in selected for keep, name in zip(
+            self.train_mask, self.source_episode_names)], dtype=bool)
+        subset.train_mask = mask
+        subset.sampler = SequenceSampler(
+            replay_buffer=self.replay_buffer, sequence_length=self.horizon,
+            pad_before=self.pad_before, pad_after=self.pad_after,
+            episode_mask=mask,
+        )
+        subset.point_cloud_noise_std = 0.0
+        return subset, selected
+
     def get_normalizer(self, mode: str = "limits", **kwargs) -> LinearNormalizer:
-        # Each last dimension is normalized independently.
+        # Fit every field on training frames only. In particular, validation
+        # actions, robot states and camera points must not set the limits.
+        ends = np.asarray(self.replay_buffer.episode_ends[:], dtype=np.int64)
+        starts = np.r_[0, ends[:-1]]
+        spans = [(int(start), int(end)) for keep, start, end in
+                 zip(self.train_mask, starts, ends) if keep]
+        if not spans:
+            raise ValueError("Cannot fit normalizer without training episodes")
         data = {
-            "action": self.replay_buffer["action"],
-            "agent_pos": self.replay_buffer["state"],
-            "point_cloud": self.replay_buffer["point_cloud"],
+            "action": np.concatenate([self.replay_buffer["action"][a:b] for a, b in spans]),
+            "agent_pos": np.concatenate([self.replay_buffer["state"][a:b] for a, b in spans]),
+            "point_cloud": np.concatenate([self.replay_buffer["point_cloud"][a:b] for a, b in spans]),
         }
         normalizer = LinearNormalizer()
         normalizer.fit(data=data, last_n_dims=1, mode=mode, **kwargs)

@@ -70,6 +70,10 @@ def evaluate_split(policy, dataset, device, batch_size, seed, train_mean,
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=0)
     predictions, targets, mean_predictions, hold_predictions = [], [], [], []
     pc_deltas, state_deltas = [], []
+    episode_ends = np.asarray(dataset.replay_buffer.episode_ends[:], dtype=np.int64)
+    names = getattr(dataset, "source_episode_names", [])
+    sample_indices = dataset.sampler.indices
+    sample_bags = []
     start = policy.n_obs_steps - 1
     end = start + policy.n_action_steps
 
@@ -81,6 +85,10 @@ def evaluate_split(policy, dataset, device, batch_size, seed, train_mean,
 
         predictions.append(prediction)
         targets.append(target)
+        first = batch_index * batch_size
+        for sequence in sample_indices[first:first + len(target)]:
+            episode = int(np.searchsorted(episode_ends, sequence[0], side="right"))
+            sample_bags.append(names[episode] if names else f"episode_{episode}")
         mean_predictions.append(np.broadcast_to(train_mean, target.shape).copy())
         current_state = batch["obs"]["agent_pos"][:, start:start + 1].numpy()
         hold_predictions.append(np.repeat(current_state, policy.n_action_steps, axis=1))
@@ -119,12 +127,30 @@ def evaluate_split(policy, dataset, device, batch_size, seed, train_mean,
             ),
         },
     }
-    result["improvement_vs_train_mean_percent"] = 100.0 * (
-        1.0 - result["model"]["rmse"] / result["train_mean_baseline"]["rmse"]
-    )
-    result["improvement_vs_hold_state_percent"] = 100.0 * (
-        1.0 - result["model"]["rmse"] / result["hold_current_state_baseline"]["rmse"]
-    )
+    result["per_horizon_step"] = [
+        metrics(prediction[:, step:step + 1], target[:, step:step + 1])
+        for step in range(target.shape[1])
+    ]
+    result["by_source"] = {}
+    result["by_bag"] = {}
+    for source in ("A", "B"):
+        mask = np.asarray([bag.startswith(source + "/") for bag in sample_bags])
+        if mask.any():
+            result["by_source"][source] = metrics(prediction[mask], target[mask])
+    for bag in sorted(set(sample_bags)):
+        mask = np.asarray([value == bag for value in sample_bags])
+        result["by_bag"][bag] = {
+            "sequences": int(mask.sum()),
+            "mae": float(np.mean(np.abs(prediction[mask] - target[mask]))),
+            "rmse": float(np.sqrt(np.mean(np.square(prediction[mask] - target[mask])))),
+        }
+    for key, baseline in (
+        ("improvement_vs_train_mean_percent", "train_mean_baseline"),
+        ("improvement_vs_hold_state_percent", "hold_current_state_baseline"),
+    ):
+        baseline_rmse = result[baseline]["rmse"]
+        result[key] = (100.0 * (1.0 - result["model"]["rmse"] / baseline_rmse)
+                       if baseline_rmse > 0 else None)
     return result
 
 
@@ -150,11 +176,18 @@ def main() -> None:
     if args.dataset:
         OmegaConf.update(cfg, "task.dataset.zarr_path", str(args.dataset.expanduser().resolve()))
 
-    epoch = dill.loads(payload["pickles"]["epoch"])
-    global_step = dill.loads(payload["pickles"]["global_step"])
-    state_key = "ema_model" if "ema_model" in payload["state_dicts"] else "model"
+    if payload.get("format_version") == 2:
+        epoch = int(payload["next_epoch"])
+        global_step = int(payload["global_step"])
+        state_key = "ema_model" if "ema_model" in payload else "model"
+        weights = payload[state_key]
+    else:
+        epoch = dill.loads(payload["pickles"]["epoch"])
+        global_step = dill.loads(payload["pickles"]["global_step"])
+        state_key = "ema_model" if "ema_model" in payload["state_dicts"] else "model"
+        weights = payload["state_dicts"][state_key]
     policy = hydra.utils.instantiate(cfg.policy)
-    policy.load_state_dict(payload["state_dicts"][state_key])
+    policy.load_state_dict(weights)
     del payload
     gc.collect()
 
