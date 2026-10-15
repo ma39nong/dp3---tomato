@@ -1,0 +1,27 @@
+contract_version: 1
+units: radian
+topics:
+  left_arm_state: {topic: /left/franka/joint_states, type: sensor_msgs/msg/JointState}
+  right_arm_state: {topic: /right/franka/joint_states, type: sensor_msgs/msg/JointState}
+  left_hand_state: {topic: /sharpa/left/joint_states, type: sensor_msgs/msg/JointState}
+  right_hand_state: {topic: /sharpa/right/joint_states, type: sensor_msgs/msg/JointState}
+  validated_arm_action: {topic: /teleop/validated_arm_commands, type: sensor_msgs/msg/JointState}
+  left_hand_action: {topic: /sharpa/left/command, type: sensor_msgs/msg/JointState}
+  right_hand_action: {topic: /sharpa/right/command, type: sensor_msgs/msg/JointState}
+  arm_command_status: {topic: /teleop/arm_command_status, type: teleop_interfaces/msg/ArmCommandStatus}
+  cam0_depth: {topic: /cam0/depth/image_raw, type: sensor_msgs/msg/Image}
+  cam0_depth_info: {topic: /cam0/depth/camera_info, type: sensor_msgs/msg/CameraInfo}
+source_joint_names:
+  measured_left_arm: &la [left_fr3_joint1, left_fr3_joint2, left_fr3_joint3, left_fr3_joint4, left_fr3_joint5, left_fr3_joint6, left_fr3_joint7]
+  measured_right_arm: &ra [right_fr3_joint1, right_fr3_joint2, right_fr3_joint3, right_fr3_joint4, right_fr3_joint5, right_fr3_joint6, right_fr3_joint7]
+  validated_left_arm: [left_fr3v2_joint1, left_fr3v2_joint2, left_fr3v2_joint3, left_fr3v2_joint4, left_fr3v2_joint5, left_fr3v2_joint6, left_fr3v2_joint7]
+  validated_right_arm: [right_fr3v2_joint1, right_fr3v2_joint2, right_fr3v2_joint3, right_fr3v2_joint4, right_fr3v2_joint5, right_fr3v2_joint6, right_fr3v2_joint7]
+  left_hand: &lh [left_thumb_CMC_FE, left_thumb_CMC_AA, left_thumb_MCP_FE, left_thumb_MCP_AA, left_thumb_IP, left_index_MCP_FE, left_index_MCP_AA, left_index_PIP, left_index_DIP, left_middle_MCP_FE, left_middle_MCP_AA, left_middle_PIP, left_middle_DIP, left_ring_MCP_FE, left_ring_MCP_AA, left_ring_PIP, left_ring_DIP, left_pinky_CMC, left_pinky_MCP_FE, left_pinky_MCP_AA, left_pinky_PIP, left_pinky_DIP]
+  right_hand: &rh [right_thumb_CMC_FE, right_thumb_CMC_AA, right_thumb_MCP_FE, right_thumb_MCP_AA, right_thumb_IP, right_index_MCP_FE, right_index_MCP_AA, right_index_PIP, right_index_DIP, right_middle_MCP_FE, right_middle_MCP_AA, right_middle_PIP, right_middle_DIP, right_ring_MCP_FE, right_ring_MCP_AA, right_ring_PIP, right_ring_DIP, right_pinky_CMC, right_pinky_MCP_FE, right_pinky_MCP_AA, right_pinky_PIP, right_pinky_DIP]
+  left_hand_action: &lha [thumb_CMC_FE, thumb_CMC_AA, thumb_MCP_FE, thumb_MCP_AA, thumb_IP, index_MCP_FE, index_MCP_AA, index_PIP, index_DIP, middle_MCP_FE, middle_MCP_AA, middle_PIP, middle_DIP, ring_MCP_FE, ring_MCP_AA, ring_PIP, ring_DIP, pinky_CMC, pinky_MCP_FE, pinky_MCP_AA, pinky_PIP, pinky_DIP]
+  right_hand_action: *lha
+contract_joint_names:
+  left_arm: *la
+  right_arm: *ra
+  left_hand: *lh
+  right_hand: *rh

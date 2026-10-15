@@ -32,7 +32,7 @@ OmegaConf.register_new_resolver("eval", eval, replace=True)
 
 
 GROUPS = {"left_arm": range(0, 7), "left_hand": range(7, 27),
-          "right_arm": range(27, 34), "right_hand": range(34, 54)}
+          "right_arm": range(29, 36), "right_hand": range(36, 58)}
 
 
 def error_metrics(prediction: np.ndarray, target: np.ndarray) -> dict:
@@ -170,7 +170,7 @@ def main() -> None:
         for batch_index, batch in enumerate(loader):
             obs = {key: value.to(device) for key, value in batch["obs"].items()}
             if (obs["point_cloud"].shape[1:] != (int(cfg.horizon), 4096, 3)
-                    or obs["agent_pos"].shape[1:] != (int(cfg.horizon), 54)):
+                    or obs["agent_pos"].shape[1:] != (int(cfg.horizon), 58)):
                 raise ValueError("Unexpected observation shape")
             torch.manual_seed(args.seed + 100000 + batch_index)
             if device.type == "cuda":
@@ -181,7 +181,7 @@ def main() -> None:
                 torch.cuda.synchronize(device)
             latency.append(time.perf_counter() - start)
             pred = prediction.cpu().numpy()
-            if pred.shape[1:] != (4, 54) or not np.isfinite(pred).all():
+            if pred.shape[1:] != (4, 58) or not np.isfinite(pred).all():
                 raise ValueError("Invalid prediction shape or nonfinite action")
             target = batch["action"][:, 1:5].numpy()
             hold = np.repeat(batch["obs"]["agent_pos"][:, 1:2].numpy(), 4, axis=1)
@@ -219,7 +219,7 @@ def main() -> None:
         "weights": "ema_model", "normalizer": "checkpoint EMA state_dict",
         "dataset": str(dataset_path), "validation_sequences": len(prediction),
         "action_shape": list(prediction.shape[1:]),
-        "motion_definition": "RMS consecutive GT absolute-action change over 4 steps and 54 joints, rad",
+        "motion_definition": "RMS consecutive GT absolute-action change over 4 steps and 58 joints, rad",
         "low_motion_threshold_rad": train_threshold,
         "strong_motion_threshold_rad": strong_threshold,
         "threshold_source": "25th percentile of training sequence motion scores",

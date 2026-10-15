@@ -1,0 +1,23 @@
+{
+  "schema": "harvest_dp3_prediction_bundle/sharpa-v1",
+  "robot": "franka-sharpa",
+  "checkpoint_source": "outputs/harvest_tomato_sharpa_episode68/checkpoints/",
+  "prediction_semantics": "absolute_joint_target_rad",
+  "observation_steps": 2,
+  "action_steps": 4,
+  "state_dim": 58,
+  "action_dim": 58,
+  "num_points": 4096,
+  "target_hz": 10,
+  "state_layout": ["left_arm:7", "left_hand:22", "right_arm:7", "right_hand:22"],
+  "topics": {
+    "left_arm_state": "/left/franka/joint_states",
+    "right_arm_state": "/right/franka/joint_states",
+    "left_hand_state": "/sharpa/left/joint_states",
+    "right_hand_state": "/sharpa/right/joint_states",
+    "left_hand_command": "/sharpa/left/command",
+    "right_hand_command": "/sharpa/right/command",
+    "validated_arm_command": "/teleop/validated_arm_commands"
+  },
+  "contract": "configs/sharpa_episode68_58d_contract.json"
+}

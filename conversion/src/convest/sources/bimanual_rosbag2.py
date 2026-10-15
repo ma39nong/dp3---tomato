@@ -360,7 +360,7 @@ def read_dp3_streams(bag, contract, require_hand_command_status=True):
             streams[f"action.{side}_arm"] = Series.build(samples)
 
     for side in ("left", "right"):
-        joints = names[f"{side}_hand"]
+        joints = names.get(f"{side}_hand_action", names[f"{side}_hand"])
         measured = streams[f"state.{side}_hand"]
         seed = (measured.times[0], measured.values[0][:len(joints)], measured.receive_times[0])
         samples = [seed, *[

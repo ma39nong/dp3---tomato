@@ -1,0 +1,27 @@
+source_root: /home/user/company-remote-2/real/harvest-tomato/origin-sharpa
+output_root: outputs/harvest_tomato_sharpa_episode68
+repo_id: ma39nong/harvest_tomato_sharpa
+source_format: bimanual_rosbag2
+target_format: dp3_uncropped_zarr
+contract: schemas/harvest_tomato_sharpa_contract.yaml
+schema_dir: schemas
+task: 双臂 Sharpa 采摘番茄
+quality_groups: {train: lists/harvest_tomato_sharpa_episode68.txt}
+fps: 10
+max_staleness_ms: 150
+window: available_intersection
+min_segment_frames: 2
+state_dim: 58
+max_joint_step_rad: 1.0
+max_hand_step: 1.0
+min_free_gb: 10
+action_policy: sample_hold
+depth_scale_m: 0.001
+min_depth_m: 0.05
+max_depth_m: 3.0
+pixel_stride: 2
+source_point_frame: cam0_depth_optical_frame
+point_frame: cam0_depth_optical_frame
+T_point_from_depth_camera: [[1.0, 0, 0, 0], [0, 1.0, 0, 0], [0, 0, 1.0, 0], [0, 0, 0, 1.0]]
+calibration_version: cam0-episode68
+require_coordinate_transform: false

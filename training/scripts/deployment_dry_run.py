@@ -33,8 +33,8 @@ from convest.formats.dp3_zarr import point_cloud  # noqa: E402
 from bimanual_zarr import _sample_points  # noqa: E402
 
 OmegaConf.register_new_resolver("eval", eval, replace=True)
-GROUPS = (("left_arm", 0, 7), ("left_hand", 7, 27),
-          ("right_arm", 27, 34), ("right_hand", 34, 54))
+GROUPS = (("left_arm", 0, 7), ("left_hand", 7, 29),
+          ("right_arm", 29, 36), ("right_hand", 36, 58))
 
 
 def decode_depth(msg) -> np.ndarray:
@@ -89,9 +89,9 @@ def checked_prediction(action: np.ndarray, state: np.ndarray, demo_min: np.ndarr
                        demo_max: np.ndarray, demo_max_step: float,
                        demo_target_state_gap: float) -> list[str]:
     reasons = []
-    if action.shape != (4, 54):
+    if action.shape != (4, 58):
         return [f"invalid_action_shape:{action.shape}"]
-    if state.shape != (54,):
+    if state.shape != (58,):
         return [f"invalid_state_shape:{state.shape}"]
     if not np.isfinite(action).all() or not np.isfinite(state).all():
         return ["nonfinite_action_or_state"]
